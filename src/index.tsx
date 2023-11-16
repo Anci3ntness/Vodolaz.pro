@@ -1,19 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import "./styles/global.scss"
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import { Fragment, PropsWithChildren } from "react"
+import React, { createContext } from "react"
+import ReactDOM from "react-dom/client"
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+import App from "./App"
+import indexLayout from "./layouts/indexLayout"
+
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
+
+const BaseLayout = ({ children }: PropsWithChildren) => (
+	<Fragment>{children}</Fragment>
+)
+let Layout = BaseLayout
+
+Layout = indexLayout
+
+export const Context = createContext({})
+
+const context = {}
+function AppWithProvider() {
+	return (
+		<Context.Provider value={context}>
+			<Layout>
+				<App />
+			</Layout>
+		</Context.Provider>
+	)
+}
+
+root.render(<AppWithProvider />)
