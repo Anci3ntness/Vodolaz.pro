@@ -1,0 +1,35 @@
+.root {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	border-radius: 0.25em 0.25em 0 0;
+	transition: background-color 100ms ease-in;
+	border: 1px solid #dae0e7;
+	background: #e9e9e9;
+	overflow: hidden;
+	user-select: none;
+	padding: 1em;
+	text-align: center;
+	&:hover {
+		background-color: #efefef;
+	}
+	&:after {
+		content: "";
+		height: 3em;
+		display: inline-block;
+		vertical-align: middle;
+	}
+	.title {
+		display: inline-block;
+		display: -webkit-inline-box;
+		max-height: 100%;
+		vertical-align: middle;
+		-webkit-box-orient: vertical;
+		-webkit-box-align: center;
+		-webkit-line-clamp: 2;
+		line-height: 1.5em;
+		width: 15em;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+}

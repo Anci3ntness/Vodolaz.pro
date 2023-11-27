@@ -1,0 +1,15 @@
+.root {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	background-color: white;
+	border-radius: 0.25em;
+	padding: 0.25em;
+	&:hover {
+		background-color: #efefef;
+	}
+	&:active {
+		background-color: #afafaf;
+	}
+}

@@ -1,4 +1,8 @@
 {
     "Main_Route": "/",
-    "Admin_Route": "/admin"
+    "Cycle_Route": "/cycle",
+    "SemiCycle_Route": "/semi",
+    "ReverseCycle_Route": "/reverse",
+    "DGSCycle_Route": "/dgs",
+    "Chat_Route": "/chat"
 }

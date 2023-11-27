@@ -1,13 +1,22 @@
+import { Fragment, PropsWithChildren } from "react"
 import { HashRouter } from "react-router-dom"
 
 import AppRouter from "./components/default/AppRouter"
-import NavBar from "./components/default/NavBar"
+import indexLayout from "./layouts/indexLayout"
 
 function App() {
+	const BaseLayout = ({ children }: PropsWithChildren) => (
+		<Fragment>{children}</Fragment>
+	)
+	let Layout = BaseLayout
+
+	Layout = indexLayout
+
 	return (
 		<HashRouter>
-			<NavBar />
-			<AppRouter />
+			<Layout>
+				<AppRouter />
+			</Layout>
 		</HashRouter>
 	)
 }
