@@ -1,17 +1,22 @@
+import _ from "lodash"
 import { observer } from "mobx-react-lite"
 import React, { ChangeEvent, useEffect, useState } from "react"
 
+import Button from "../../components/common/Button"
 import Input from "../../components/common/Input"
 import Label from "../../components/common/Label"
+import { SemiClosedLoop, convertToMatrix } from "../../controllers/vodolaz"
 import { useStore } from "../../store/useStore"
 import classes from "./index.module.scss"
 
 function SemiCyclePage() {
 	const { SemiCycleStore } = useStore()
 
-	const [volume, setVolume] = useState(SemiCycleStore.volume)
-	const [density, setDensity] = useState(SemiCycleStore.density)
-	const [pressure, setPressure] = useState(SemiCycleStore.pressure)
+	const semiLoop = new SemiClosedLoop()
+
+	const [volume, setVolume] = useState(SemiCycleStore.volume!)
+	const [density, setDensity] = useState(SemiCycleStore.density!)
+	const [pressure, setPressure] = useState(SemiCycleStore.pressure!)
 
 	function densityHandler(event: ChangeEvent<HTMLInputElement>) {
 		setDensity(Number(event.target.value))
@@ -21,6 +26,64 @@ function SemiCyclePage() {
 	}
 	function pressureHandler(event: ChangeEvent<HTMLInputElement>) {
 		setPressure(Number(event.target.value))
+	}
+
+	async function additionaly(timePlusDepth: number[]): Promise<string[]> {
+		let output: string[] = []
+		let flag = true
+		let maxDecom = [0]
+
+		const data = await convertToMatrix()
+		let vodorod: number = 100 - density
+		let normalDepth: number = 0
+		for (let datum of data) {
+			if (
+				timePlusDepth[1] - datum[0] < 3 &&
+				timePlusDepth[1] - datum[0] >= 0
+			) {
+				normalDepth = datum[0]
+			}
+			if (
+				(timePlusDepth[1] * vodorod) / 80 - datum[0] < 3 &&
+				(timePlusDepth[1] * vodorod) / 80 - datum[0] >= 0
+			) {
+				if (datum[1] + datum[2] < timePlusDepth[0]) {
+					if (flag) {
+						maxDecom = [datum[0], datum[1], datum[2]]
+						flag = false
+					} else if (
+						datum[1] + datum[2] >
+						maxDecom[1] + maxDecom[2]
+					) {
+						maxDecom = [datum[0], datum[1], datum[2]]
+					}
+				}
+			}
+		}
+
+		output.push("Учитывая декомпрессионные обязательсва: ")
+		if (maxDecom[0] === 0) {
+			output.push(
+				"Для заданной системы декомпрессионные обязательства не нужны."
+			)
+		} else {
+			output.push(
+				"Глубина спуска: " +
+					normalDepth +
+					" м., " +
+					"эквивалент глубины: " +
+					maxDecom[0] +
+					" м.(воздух).\n" +
+					"Экспозиция на грунте: " +
+					maxDecom[1] +
+					" мин.\n" +
+					"Общее время декомпрессии: " +
+					maxDecom[2] +
+					" мин.\n"
+			)
+		}
+
+		return output
 	}
 
 	useEffect(() => {
@@ -78,8 +141,43 @@ function SemiCyclePage() {
 						/>
 					</div>
 				</div>
+				<Button
+					className={classes.submit}
+					onClick={async (event) => {
+						event.preventDefault()
+						if (!!volume && !!pressure && !!density) {
+							const [semiOutput, numberOutput] =
+								semiLoop.printDepthAndTime(
+									volume,
+									density,
+									pressure
+								)
+							const additionalyOutput = await additionaly(
+								numberOutput
+							)
+							const output: string[] = _.concat(
+								semiOutput,
+								additionalyOutput
+							)
+							SemiCycleStore.setOutput(output)
+						} else {
+							window.electron.sendAlert("Заполните все поля")
+						}
+					}}
+					type='submit'
+				>
+					Вычислить
+				</Button>
 			</div>
-			<div className={classes.output_area}></div>
+			<div className={classes.output_area}>
+				{SemiCycleStore.output.map((e, i) => {
+					return (
+						<div className={classes["msg-text"]} key={i}>
+							{e}
+						</div>
+					)
+				})}
+			</div>
 		</div>
 	)
 }

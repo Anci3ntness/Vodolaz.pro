@@ -1,13 +1,17 @@
 import { observer } from "mobx-react-lite"
 import React, { ChangeEvent, useEffect, useState } from "react"
 
+import Button from "../../components/common/Button"
 import Input from "../../components/common/Input"
 import Label from "../../components/common/Label"
+import { SemiClosedLoop } from "../../controllers/vodolaz"
 import { useStore } from "../../store/useStore"
 import classes from "./index.module.scss"
 
 function ReverseCyclePage() {
 	const { ReverseCycleStore } = useStore()
+
+	const semiLoop = new SemiClosedLoop()
 
 	const [deepness, setDeepness] = useState(ReverseCycleStore.deepness)
 	const [duration, setDuration] = useState(ReverseCycleStore.duration)
@@ -58,8 +62,36 @@ function ReverseCyclePage() {
 						/>
 					</div>
 				</div>
+				<Button
+					className={classes.submit}
+					onClick={(event) => {
+						event.preventDefault()
+						if (!!deepness && !!duration) {
+							const [output, numberOutput] =
+								semiLoop.printValuePercentPressure(
+									deepness,
+									duration
+								)
+
+							ReverseCycleStore.setOutput(output)
+						} else {
+							window.electron.sendAlert("Заполните все поля")
+						}
+					}}
+					type='submit'
+				>
+					Вычислить
+				</Button>
 			</div>
-			<div className={classes.output_area}></div>
+			<div className={classes.output_area}>
+				{ReverseCycleStore.output.map((e, i) => {
+					return (
+						<div className={classes["msg-text"]} key={i}>
+							{e}
+						</div>
+					)
+				})}
+			</div>
 		</div>
 	)
 }

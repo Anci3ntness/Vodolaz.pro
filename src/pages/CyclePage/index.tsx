@@ -109,9 +109,11 @@ function CyclePage() {
 					onClick={(event) => {
 						event.preventDefault()
 						if (!!volume && !!pressure && !!difficalty)
-							loop.printTime(volume, pressure, difficalty)
+							CycleStore.setOutput(
+								loop.printTime(volume, pressure, difficalty)
+							)
 						else {
-							alert("Заполните все поля")
+							window.electron.sendAlert("Заполните все поля")
 						}
 					}}
 					type='submit'
@@ -119,7 +121,15 @@ function CyclePage() {
 					Вычислить
 				</Button>
 			</div>
-			<div className={classes.output_area}></div>
+			<div className={classes.output_area}>
+				{CycleStore.output.map((e, i) => {
+					return (
+						<div className={classes["msg-text"]} key={i}>
+							{e}
+						</div>
+					)
+				})}
+			</div>
 		</div>
 	)
 }

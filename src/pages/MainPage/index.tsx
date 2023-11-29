@@ -1,31 +1,42 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
+
+import classes from "./index.module.scss"
 
 export default function MainPage() {
-	const [pogoda, setPogoda] = useState({ weather: [] })
-
 	useEffect(() => {
-		fetch(
-			"http://api.openweathermap.org/data/2.5/weather?id=524901&lang=ru&appid=f8e55e729e04e339d26abab86d9211a3"
-		)
-			.then(function (resp) {
-				return resp.json()
-			})
-			.then(function (data) {
-				data.main.temp = Math.round(data.main.temp - 273) + "&deg;"
-				setPogoda(data)
-				console.log(data)
-			})
-			.catch(function () {
-				//Обрабатываем ошибки
-			})
+		;(function (d, s, id) {
+			const fjs = d.getElementsByTagName(s)[0]
+			const js = d.createElement(s) as HTMLScriptElement
+			js.id = id
+			js.src = "https://weatherwidget.io/js/widget.min.js"
+			js.defer = true
+			fjs.parentNode && fjs.parentNode.insertBefore(js, fjs)
+		})(document, "script", "weatherwidget-io-js")
 	}, [])
 
 	return (
-		<div>
-			<img
-				alt=''
-				src={`https://openweathermap.org/img/wn/${pogoda?.weather?.[0]?.["icon"]}@2x.png`}
-			/>
+		<div className={classes.root}>
+			<a
+				className='weatherwidget-io'
+				href='https://forecast7.com/ru/55d7637d62/moscow/'
+				data-label_1='Москва'
+				data-label_2='Погода'
+				data-mode='Current'
+				data-theme='original'
+				style={{ pointerEvents: "none" }}
+				onClick={(e) => {
+					e.preventDefault()
+				}}
+			>
+				<div className={classes.loading}>
+					<div className={classes["lds-ring"]}>
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				</div>
+			</a>
 		</div>
 	)
 }

@@ -11,14 +11,14 @@
 		justify-content: center;
 		background-color: #d9d9d9;
 		width: 20em;
+		align-items: center;
 		.input_place {
 			padding: 1em;
-			flex: 1;
 			display: flex;
 			flex-direction: column;
 			max-height: 32em;
 			gap: 2em;
-			justify-content: center;
+			justify-content: space-between;
 			overflow-y: auto;
 			overflow-x: hidden;
 			.input_wrapper {
@@ -34,6 +34,12 @@
 				}
 			}
 		}
+		.submit {
+			width: 10em;
+			height: 3em;
+			margin: 1em 0;
+			flex-shrink: 0;
+		}
 	}
 
 	.output_area {
@@ -41,5 +47,21 @@
 		background-color: #d9d9d9;
 		flex: 1;
 		border-radius: 1em;
+		flex-direction: column;
+		padding: 2em;
+		overflow-y: auto;
+		.msg-text {
+			align-self: flex-start;
+			font-size: 1.1em;
+			padding: 0.4em 0.8em;
+			border-radius: 1em;
+			box-shadow: 0 0.0625em 0.0312em white;
+			user-select: text;
+			white-space: pre-wrap;
+			word-break: break-word;
+			max-width: 60%;
+			margin-top: 1em;
+			background-color: white;
+		}
 	}
 }

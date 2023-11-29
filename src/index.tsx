@@ -6,7 +6,11 @@ import App from "./App"
 import store, { StoreContext } from "./store/useStore"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
-
+declare global {
+	interface Window {
+		electron: any
+	}
+}
 function AppWithProvider() {
 	return (
 		<StoreContext.Provider value={store}>

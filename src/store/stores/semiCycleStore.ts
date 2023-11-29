@@ -6,11 +6,12 @@ class SemiCycleStore implements ISemiCycleStore {
 	private _density?: number
 	private _volume?: number
 	private _pressure?: number
-
+	private _output: string[]
 	constructor() {
 		this._density = undefined
 		this._volume = undefined
 		this._pressure = undefined
+		this._output = []
 		makeAutoObservable(this)
 	}
 	get density() {
@@ -22,6 +23,9 @@ class SemiCycleStore implements ISemiCycleStore {
 	get pressure() {
 		return this._pressure
 	}
+	get output() {
+		return this._output
+	}
 
 	setVolume(value: typeof this._volume) {
 		this._volume = value
@@ -31,6 +35,10 @@ class SemiCycleStore implements ISemiCycleStore {
 	}
 	setPressure(value: typeof this._pressure) {
 		this._pressure = value
+	}
+
+	setOutput(value: typeof this._output) {
+		this._output = value
 	}
 }
 

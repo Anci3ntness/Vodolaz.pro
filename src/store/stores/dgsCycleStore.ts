@@ -6,11 +6,12 @@ class DGSCycleStore implements IDGSCycleStore {
 	private _duration?: number
 	private _deepness?: number
 	private _difficalty?: string
-
+	private _output: string[]
 	constructor() {
 		this._difficalty = undefined
 		this._duration = undefined
 		this._deepness = undefined
+		this._output = []
 		makeAutoObservable(this)
 	}
 	get duration() {
@@ -22,6 +23,9 @@ class DGSCycleStore implements IDGSCycleStore {
 	get difficalty() {
 		return this._difficalty
 	}
+	get output() {
+		return this._output
+	}
 	setDifficalty(value: typeof this._difficalty) {
 		this._difficalty = value
 	}
@@ -30,6 +34,10 @@ class DGSCycleStore implements IDGSCycleStore {
 	}
 	setDeepness(value: typeof this._deepness) {
 		this._deepness = value
+	}
+
+	setOutput(value: typeof this._output) {
+		this._output = value
 	}
 }
 
