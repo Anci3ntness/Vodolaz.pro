@@ -1,4 +1,11 @@
-const { BrowserWindow, app, shell, ipcMain, dialog } = require("electron")
+const {
+	BrowserWindow,
+	app,
+	shell,
+	ipcMain,
+	dialog,
+	session,
+} = require("electron")
 
 const path = require("path")
 const isDev = require("electron-is-dev")
@@ -32,6 +39,30 @@ function createWindow(id) {
 	if (isDev) {
 		win.webContents.openDevTools()
 	}
+
+	// const filter = {
+	// 	urls: ["*://weatherwidget.io/*", "*://api.openai.com/*"],
+	// }
+	// const corsHeaderValue = isDev
+	// 	? "http://localhost:8080"
+	// 	: "capacitor-electron://-"
+
+	// session.defaultSession.webRequest.onBeforeSendHeaders(
+	// 	filter,
+	// 	(details, callback) => {
+	// 		details.requestHeaders["Access-Control-Allow-Origin"] = ["*"]
+	// 		callback({ requestHeaders: details.requestHeaders })
+	// 	}
+	// )
+
+	// session.defaultSession.webRequest.onHeadersReceived(
+	// 	filter,
+	// 	(details, callback) => {
+	// 		details.responseHeaders["Access-Control-Allow-Origin"] = ["*"]
+	// 		callback({ responseHeaders: details.responseHeaders })
+	// 	}
+	// )
+
 	win.on("closed", () => (win = null))
 
 	ipcMain.on("send-alert", (event, incomingMessage) => {
@@ -45,11 +76,11 @@ function createWindow(id) {
 		dialog.showMessageBox(win, options)
 	})
 	ipcMain.on("toMain", (event, args) => {
-		const data = fs.readFileSync(path.join(__dirname, "/target.xlsx"))
+		const data = args
 		win.webContents.send("fromMain", data)
 	})
 	ipcMain.handle("invokeMain", async (event, args) => {
-		const data = fs.readFileSync(path.join(__dirname, "/target.xlsx"))
+		const data = fs.readFileSync(path.join(__dirname, "./target.xlsx"))
 		return data
 	})
 }
@@ -88,3 +119,4 @@ app.on("web-contents-created", (event, contents) => {
 		return { action: "deny" }
 	})
 })
+app.commandLine.appendSwitch("lang", "EN")

@@ -1,3 +1,4 @@
+import _ from "lodash"
 import { observer } from "mobx-react-lite"
 import React, { ChangeEvent, useEffect, useState } from "react"
 
@@ -108,11 +109,33 @@ function CyclePage() {
 					className={classes.submit}
 					onClick={(event) => {
 						event.preventDefault()
-						if (!!volume && !!pressure && !!difficalty)
-							CycleStore.setOutput(
-								loop.printTime(volume, pressure, difficalty)
+						if (!!volume && !!pressure && !!difficalty) {
+							const output = loop.printTime(
+								volume,
+								pressure,
+								difficalty
 							)
-						else {
+
+							if (_.isEqual(output, CycleStore.output)) return
+							const msgTextClassArray = Array.from(
+								document.getElementsByClassName(
+									classes["msg-text"]
+								)
+							)
+							msgTextClassArray.forEach((e) => {
+								e.classList.remove(classes["awake-msg"])
+								void e.getBoundingClientRect().width
+								e.classList.add(classes["destroy-msg"])
+							})
+							setTimeout(() => {
+								CycleStore.setOutput(output)
+								msgTextClassArray.forEach((e) => {
+									e.classList.remove(classes["destroy-msg"])
+									void e.getBoundingClientRect().width
+									e.classList.add(classes["awake-msg"])
+								})
+							}, 100)
+						} else {
 							window.electron.sendAlert("Заполните все поля")
 						}
 					}}
@@ -124,7 +147,13 @@ function CyclePage() {
 			<div className={classes.output_area}>
 				{CycleStore.output.map((e, i) => {
 					return (
-						<div className={classes["msg-text"]} key={i}>
+						<div
+							className={[
+								classes["msg-text"],
+								classes["awake-msg"],
+							].join(" ")}
+							key={i}
+						>
 							{e}
 						</div>
 					)

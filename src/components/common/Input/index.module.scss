@@ -17,7 +17,8 @@
 	}
 	.radio_label {
 		.radio:checked + .custom_button {
-			border: 0.025em solid var(--layout-color);
+			border: 0.025em solid;
+			border-color: var(--layout-color);
 		}
 		.custom_button {
 			height: 2em;
@@ -32,6 +33,9 @@
 			background-color: white;
 			color: black;
 			padding: 0.2em 0.6em;
+			border: 0.1em solid;
+			border-color: white;
+			transition: border-color 0.08s linear;
 		}
 	}
 }

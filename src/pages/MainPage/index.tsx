@@ -16,6 +16,7 @@ export default function MainPage() {
 
 	return (
 		<div className={classes.root}>
+			<div className={classes.divider}></div>
 			<a
 				className='weatherwidget-io'
 				href='https://forecast7.com/ru/55d7637d62/moscow/'

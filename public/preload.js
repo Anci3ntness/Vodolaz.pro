@@ -18,7 +18,7 @@ contextBridge.exposeInMainWorld("electron", {
 		}
 	},
 	invoke: (channel, args) => {
-		let validChannels = ["invokeMain"]
+		let validChannels = ["invokeMain", "invokeAi"]
 		if (validChannels.includes(channel)) {
 			return ipcRenderer.invoke(channel, args)
 		}

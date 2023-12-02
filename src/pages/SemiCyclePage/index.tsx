@@ -159,7 +159,25 @@ function SemiCyclePage() {
 								semiOutput,
 								additionalyOutput
 							)
-							SemiCycleStore.setOutput(output)
+							if (_.isEqual(output, SemiCycleStore.output)) return
+							const msgTextClassArray = Array.from(
+								document.getElementsByClassName(
+									classes["msg-text"]
+								)
+							)
+							msgTextClassArray.forEach((e) => {
+								e.classList.remove(classes["awake-msg"])
+								void e.getBoundingClientRect().width
+								e.classList.add(classes["destroy-msg"])
+							})
+							setTimeout(() => {
+								SemiCycleStore.setOutput(output)
+								msgTextClassArray.forEach((e) => {
+									e.classList.remove(classes["destroy-msg"])
+									void e.getBoundingClientRect().width
+									e.classList.add(classes["awake-msg"])
+								})
+							}, 100)
 						} else {
 							window.electron.sendAlert("Заполните все поля")
 						}
@@ -172,7 +190,13 @@ function SemiCyclePage() {
 			<div className={classes.output_area}>
 				{SemiCycleStore.output.map((e, i) => {
 					return (
-						<div className={classes["msg-text"]} key={i}>
+						<div
+							className={[
+								classes["msg-text"],
+								classes["awake-msg"],
+							].join(" ")}
+							key={i}
+						>
 							{e}
 						</div>
 					)

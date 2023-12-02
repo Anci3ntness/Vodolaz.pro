@@ -3,14 +3,24 @@ import React, { useEffect, useState } from "react"
 
 import Button from "../../components/common/Button"
 import Input from "../../components/common/Input"
+import GPTMessage from "../../components/elements/GPTMessage"
+import OpenAiHandler from "../../controllers/chat"
 import { useStore } from "../../store/useStore"
-import msgType from "../../types/msgType.type"
+import {
+	chatResponceMessageRole,
+	customChatResponse,
+} from "../../types/chat-gpt.type"
 import classes from "./index.module.scss"
 
 function ChatBot() {
 	const { ChatStore } = useStore()
 
-	const [msgArray, setMsgArray] = useState<msgType[]>(ChatStore.msgArray)
+	const bot = new OpenAiHandler()
+
+	const [msgArray, setMsgArray] = useState<customChatResponse[]>(
+		ChatStore.msgArray
+	)
+	const [loading, setLoading] = useState(false)
 	const [inputValue, setInputValue] = useState("")
 
 	useEffect(() => {
@@ -29,20 +39,25 @@ function ChatBot() {
 		<div className={classes.root}>
 			<div className={classes["chat-area"]}>
 				<div className={classes["msg-area"]}>
+					<div
+						className={[
+							classes.loading,
+							loading
+								? classes.loading_animation
+								: classes.destroy_animation,
+						].join(" ")}
+					>
+						Обработка запроса...
+					</div>
 					<div className={classes["msg-wrapper"]} id='msg-wrapper'>
 						{msgArray.map((e, i) => {
 							return (
-								<div
-									key={i}
-									className={classes["msg-text"]}
-									style={
-										!e.sender
-											? { alignSelf: "flex-start" }
-											: {}
-									}
-								>
-									{e.message}
-								</div>
+								<GPTMessage
+									key={e.id}
+									id={e.id}
+									created={e.created}
+									message={e.message}
+								/>
 							)
 						})}
 					</div>
@@ -65,17 +80,41 @@ function ChatBot() {
 						onClick={(e) => {
 							e.preventDefault()
 							if (inputValue.length === 0) return
-							const value: msgType = {
-								sender: true,
-								message: validate(inputValue),
-								time: new Date(),
+							const validValue = validate(inputValue)
+							const value = {
+								id: `chatcmpl-${new Date().getTime()}`,
+								created: new Date().getTime(),
+								message: {
+									content: validValue,
+									role: chatResponceMessageRole.user,
+								},
 							}
-
-							setMsgArray((old: msgType[]) => {
-								const nov: msgType[] = [value, ...old]
+							setMsgArray((prev: customChatResponse[]) => {
+								const nov: customChatResponse[] = [
+									value,
+									...prev,
+								]
 								return nov
 							})
 							setInputValue("")
+							setLoading(true)
+							bot.createChatCompletion(validValue)
+								.then((res) =>
+									setMsgArray((prev) => {
+										const resMsg = {
+											id: res.id,
+											created: res.created,
+											message: res.choices[0].message,
+										}
+										if (typeof resMsg === "undefined")
+											return prev
+										return [resMsg, ...prev]
+									})
+								)
+								.catch((err) => console.error(err))
+								.finally(() => {
+									setLoading(false)
+								})
 						}}
 					>
 						Отправить
