@@ -18,13 +18,17 @@ export default function MainPage() {
 		<div className={classes.root}>
 			<div className={classes.divider}></div>
 			<a
-				className='weatherwidget-io'
+				className={[classes.widget, "weatherwidget-io"].join(" ")}
 				href='https://forecast7.com/ru/55d7637d62/moscow/'
 				data-label_1='Москва'
 				data-label_2='Погода'
 				data-mode='Current'
 				data-theme='original'
-				style={{ pointerEvents: "none" }}
+				data-basecolor='#325d90'
+				style={{
+					pointerEvents: "none",
+					width: "100%",
+				}}
 				onClick={(e) => {
 					e.preventDefault()
 				}}
@@ -38,6 +42,13 @@ export default function MainPage() {
 					</div>
 				</div>
 			</a>
+			<div className={classes.main_content}>
+				<h1>
+					Подбери дыхательно газовую смесь для заданных глубины и
+					времени на грунте
+				</h1>
+				<h2>Наш чат бот поможет ответить тебе на вопросы</h2>
+			</div>
 		</div>
 	)
 }

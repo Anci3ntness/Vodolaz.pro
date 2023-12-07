@@ -33,7 +33,8 @@ function Message({ id, created, message }: customChatResponse) {
 							borderTopRightRadius: 0,
 					  }
 					: {
-							backgroundColor: "aliceblue",
+							color: "white",
+							backgroundColor: "#082643",
 							alignSelf: "flex-start",
 							borderTopLeftRadius: 0,
 					  }

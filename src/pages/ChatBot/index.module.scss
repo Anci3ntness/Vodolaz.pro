@@ -7,6 +7,11 @@
 	gap: 2em;
 	overflow: hidden;
 	padding: 2em;
+	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)),
+		url("../../../public/images/background-page-image.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
 	.chat-area {
 		display: flex;
 		flex-direction: column;
@@ -14,7 +19,7 @@
 		height: 100%;
 		box-shadow: 0 0 1em rgba(11, 20, 26, 0.05);
 		border-radius: 1em;
-		background-color: #363636;
+		background-color: rgba(80, 127, 151, 0.8);
 		padding: 0.5em;
 		max-width: 1600px;
 		max-height: 1200px;
@@ -34,7 +39,7 @@
 				text-align: center;
 				max-width: max-content;
 				transform: translateY(-3em);
-				// animation: fadeInFromNone 0.2s ease-out forwards;
+				z-index: 2;
 			}
 			.loading_animation {
 				visibility: visible;
@@ -67,24 +72,12 @@
 		display: flex;
 		gap: 0.5em;
 		padding-top: 0.2em;
+		height: 3em;
+		input {
+			background-color: white;
+			height: 100%;
+			color: black;
+			transition: background-color 200ms linear;
+		}
 	}
 }
-// @keyframes fadeInFromNone {
-// 	0% {
-// 		display: none;
-// 		opacity: 0;
-// 		transform: translateY(-3em);
-// 	}
-
-// 	1% {
-// 		display: block;
-// 		opacity: 0;
-// 		transform: translateY(-3em);
-// 	}
-
-// 	100% {
-// 		display: block;
-// 		opacity: 1;
-// 		transform: translateY(0);
-// 	}
-// }

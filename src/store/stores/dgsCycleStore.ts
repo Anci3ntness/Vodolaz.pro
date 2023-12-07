@@ -1,12 +1,14 @@
 import { makeAutoObservable } from "mobx"
 
+import msgType from "../../types/output-msg.type"
+
 export interface IDGSCycleStore {}
 
 class DGSCycleStore implements IDGSCycleStore {
 	private _duration?: number
 	private _deepness?: number
 	private _difficalty?: string
-	private _output: string[]
+	private _output: msgType[]
 	constructor() {
 		this._difficalty = undefined
 		this._duration = undefined

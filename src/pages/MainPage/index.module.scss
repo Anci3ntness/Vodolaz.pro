@@ -1,9 +1,28 @@
 .root {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
+	background: linear-gradient(
+			to right,
+			rgba(0, 0, 0, 0.8),
+			rgba(0, 0, 0, 0.5),
+			rgba(0, 0, 0, 0.8)
+		),
+		url("../../../public/images/background-main-image.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	align-items: center;
+	overflow-y: auto;
+	overflow-x: hidden;
 	.divider {
-		background-color: var(--child-color);
-		height: 0.5em;
+		height: 1em;
+	}
+	.widget {
+		max-height: 98px;
+		padding: 0;
+		margin: 0;
+		overflow: visible !important;
 	}
 	.loading {
 		display: flex;
@@ -11,7 +30,8 @@
 		align-items: center;
 		text-align: center;
 		height: 98px;
-		background-color: #1f567c;
+		background-color: #325d90;
+
 		.lds-ring {
 			display: inline-block;
 			position: relative;
@@ -46,6 +66,25 @@
 			100% {
 				transform: rotate(360deg);
 			}
+		}
+	}
+	.main_content {
+		flex: 1;
+		font-size: 1.5em;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		color: #eee;
+		text-shadow: 1px 0 1px #000, 0 1px 1px #000, -1px 0 1px #000,
+			0 -1px 1px #000;
+		text-align: center;
+		padding: 2em 5em;
+		gap: 1em;
+		max-width: 60em;
+		* {
+			padding: 0;
+			margin: 0;
 		}
 	}
 }

@@ -1,11 +1,13 @@
 import { makeAutoObservable } from "mobx"
 
+import msgType from "../../types/output-msg.type"
+
 export interface IReverseCycleStore {}
 
 class ReverseCycleStore implements IReverseCycleStore {
 	private _duration?: number
 	private _deepness?: number
-	private _output: string[]
+	private _output: msgType[]
 	constructor() {
 		this._duration = undefined
 		this._deepness = undefined

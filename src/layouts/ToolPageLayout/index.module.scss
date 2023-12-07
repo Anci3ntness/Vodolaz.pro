@@ -1,0 +1,51 @@
+.root {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: space-between;
+	padding: 2em 3em;
+	gap: 5em;
+	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)),
+		url("../../../public/images/background-page-image.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	.input_area {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		width: 20em;
+		align-items: center;
+		.input_place {
+			padding: 1em;
+			display: flex;
+			flex-direction: column;
+			max-height: 32em;
+			gap: 2em;
+			justify-content: space-between;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+		.submit {
+			flex: 0 1 1;
+			flex-shrink: 0;
+			width: 10em;
+			height: 3em;
+			margin: 1em 0;
+		}
+	}
+
+	.output_area {
+		display: flex;
+		background-color: rgba(80, 125, 149, 0.8);
+
+		flex: 1;
+		border-radius: 1em;
+		flex-direction: column;
+		padding: 2em;
+		overflow-y: auto;
+		min-width: 20em;
+		color: #435f83;
+		font-weight: 500;
+	}
+}

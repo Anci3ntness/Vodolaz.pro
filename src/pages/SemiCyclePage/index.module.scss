@@ -1,74 +1,42 @@
 .root {
-	display: flex;
-	width: 100%;
-	height: 100%;
-	justify-content: space-between;
-	padding: 2em 3em;
-	gap: 5em;
-	.input_area {
+	.input_wrapper {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		background-color: #d9d9d9;
-		width: 20em;
-		align-items: center;
-		.input_place {
-			padding: 1em;
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-			max-height: 32em;
-			gap: 2em;
-			justify-content: space-between;
-			overflow-y: auto;
-			overflow-x: hidden;
-			.input_wrapper {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				gap: 0.8em;
+		gap: 0.8em;
 
-				.radio_wrapper {
-					display: flex;
-					justify-content: space-between;
-					gap: 0.5em;
-				}
-			}
-		}
-		.submit {
-			width: 10em;
-			height: 3em;
-			margin: 1em 0;
+		.radio_wrapper {
+			display: flex;
+			justify-content: space-between;
+			gap: 0.5em;
 		}
 	}
 
-	.output_area {
-		display: flex;
-		background-color: #d9d9d9;
-		flex: 1;
+	.msg-text {
+		align-self: flex-start;
+		font-size: 1.1em;
+		padding: 0.4em 0.8em;
 		border-radius: 1em;
-		flex-direction: column;
-		padding: 2em;
-		overflow-y: auto;
-		.msg-text {
-			align-self: flex-start;
-			font-size: 1.1em;
-			padding: 0.4em 0.8em;
-			border-radius: 1em;
-			box-shadow: 0 0.0625em 0.0312em white;
-			user-select: text;
-			white-space: pre-wrap;
-			word-break: break-word;
-			max-width: 70%;
-			margin-top: 1em;
-			background-color: white;
-		}
-		.awake-msg {
-			animation: fromFade 0.1s linear;
-		}
-		.destroy-msg {
-			animation: fromFade 0.1s linear reverse forwards;
-		}
+		box-shadow: 0 0.0625em 0.0312em white;
+		user-select: text;
+		white-space: pre-wrap;
+		word-break: break-word;
+		max-width: 70%;
+		margin-top: 1em;
+		background-color: white;
+	}
+	.main-msg-text {
+		font-size: 1.2em;
+		font-weight: 700;
+		color: white;
+		background-color: #082643;
+		box-shadow: none;
+	}
+	.awake-msg {
+		animation: fromFade 0.1s linear;
+	}
+	.destroy-msg {
+		animation: fromFade 0.1s linear reverse forwards;
 	}
 }
 @keyframes fromFade {

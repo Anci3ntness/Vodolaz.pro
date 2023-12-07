@@ -2,7 +2,6 @@ import _ from "lodash"
 import { observer } from "mobx-react-lite"
 import React, { ChangeEvent, useEffect, useState } from "react"
 
-import Button from "../../components/common/Button"
 import Input from "../../components/common/Input"
 import Label from "../../components/common/Label"
 import {
@@ -10,7 +9,9 @@ import {
 	SemiClosedLoop,
 	convertToMatrix,
 } from "../../controllers/vodolaz"
+import ToolPageLayout from "../../layouts/ToolPageLayout"
 import { useStore } from "../../store/useStore"
+import msgType from "../../types/output-msg.type"
 import classes from "./index.module.scss"
 
 function DGSCyclePage() {
@@ -33,8 +34,8 @@ function DGSCyclePage() {
 		setDuration(Number(event.target.value))
 	}
 
-	async function additionaly(percentPressure: number[]): Promise<string[]> {
-		let output: string[] = []
+	async function additionaly(percentPressure: number[]): Promise<msgType[]> {
+		let output: msgType[] = []
 		let flag = true
 		let maxDecom = [0]
 		if (!_.isEqual(percentPressure, [-1, -1])) {
@@ -62,14 +63,20 @@ function DGSCyclePage() {
 					}
 				}
 			}
-			output.push("Учитывая декомпрессионные обязательства: ")
+			output.push({
+				main: true,
+				text: "Учитывая декомпрессионные обязательства: ",
+			})
 			if (maxDecom[0] === 0) {
-				output.push(
-					"Для заданной системы декомпрессионные обязательства не нужны."
-				)
+				output.push({
+					main: false,
+					text: "Для заданной системы декомпрессионные обязательства не нужны.",
+				})
 			} else {
-				output.push(
-					"Глубина спуска: " +
+				output.push({
+					main: false,
+					text:
+						"Глубина спуска: " +
 						normalDepth +
 						" м., " +
 						"эквивалент глубины: " +
@@ -80,15 +87,17 @@ function DGSCyclePage() {
 						" мин.\n" +
 						"Общее время декомпрессии: " +
 						maxDecom[2] +
-						" мин.\n"
-				)
+						" мин.\n",
+				})
 			}
-			output.push(
-				"Процент содержания кислорода смеси " +
-					(percentPressure[0] * 100).toFixed(2)
-			)
+			output.push({
+				main: false,
+				text:
+					"Процент содержания кислорода смеси " +
+					(percentPressure[0] * 62.5).toFixed(2),
+			})
 		} else {
-			output.push("Нет подходящего снаряжения.")
+			output.push({ main: false, text: "Нет подходящего снаряжения." })
 		}
 
 		return output
@@ -110,121 +119,107 @@ function DGSCyclePage() {
 	}, [duration])
 
 	return (
-		<div className={classes.root}>
-			<div className={classes.input_area}>
-				<div className={classes.input_place}>
-					<div className={classes.input_wrapper}>
-						<Label>Укажите рабочую глубину</Label>
-						<Input
-							after='От 12 до 60 паскалей'
-							type='number'
-							min={12}
-							max={60}
-							value={deepness || ""}
-							maxLength={2}
-							onChange={deepnessHandler}
-						/>
-					</div>
-
-					<div className={classes.input_wrapper}>
-						<Label>Укажите время работы на грунте</Label>
-						<Input
-							after='От 30 до 360 минут'
-							type='number'
-							min={30}
-							max={360}
-							value={duration || ""}
-							maxLength={3}
-							onChange={durationHandler}
-						/>
-					</div>
-					<div className={classes.input_wrapper}>
-						<Label>Выберите сложность погружения</Label>
-						<div className={classes.radio_wrapper}>
-							<Input
-								type='radio'
-								value='normal'
-								text='Нормальное'
-								onChange={difficaltyHandler}
-								checkValue={difficalty}
-							/>
-							<Input
-								type='radio'
-								value='hard'
-								text='Тяжелое'
-								onChange={difficaltyHandler}
-								checkValue={difficalty}
-							/>
-						</div>
-					</div>
-				</div>
-				<Button
-					className={classes.submit}
-					onClick={async (event) => {
-						event.preventDefault()
-						if (!!deepness && !!duration && !!difficalty) {
-							const loopOutput = loop.printVolumePlusPressure(
-								duration,
-								difficalty
-							)
-
-							const [semiOutput, semiNumberOutput] =
-								semiLoop.printValuePercentPressure(
-									deepness,
-									duration
-								)
-							const additionalyOutput = await additionaly(
-								semiNumberOutput
-							)
-							const output: string[] = _.concat(
-								semiOutput,
-								additionalyOutput,
-								loopOutput
-							)
-							if (_.isEqual(output, DGSCycleStore.output)) return
-							const msgTextClassArray = Array.from(
-								document.getElementsByClassName(
-									classes["msg-text"]
-								)
-							)
-							msgTextClassArray.forEach((e) => {
-								e.classList.remove(classes["awake-msg"])
-								void e.getBoundingClientRect().width
-								e.classList.add(classes["destroy-msg"])
-							})
-							setTimeout(() => {
-								DGSCycleStore.setOutput(output)
-								msgTextClassArray.forEach((e) => {
-									e.classList.remove(classes["destroy-msg"])
-									void e.getBoundingClientRect().width
-									e.classList.add(classes["awake-msg"])
-								})
-							}, 100)
-						} else {
-							window.electron.sendAlert("Заполните все поля")
-						}
-					}}
-					type='submit'
-				>
-					Вычислить
-				</Button>
-			</div>
-			<div className={classes.output_area}>
-				{DGSCycleStore.output.map((e, i) => {
-					return (
-						<div
-							className={[
-								classes["msg-text"],
-								classes["awake-msg"],
-							].join(" ")}
-							key={i}
-						>
-							{e}
-						</div>
+		<ToolPageLayout
+			btnOnClick={async (event) => {
+				event.preventDefault()
+				if (!!deepness && !!duration && !!difficalty) {
+					const loopOutput = loop.printVolumePlusPressure(
+						duration,
+						difficalty
 					)
-				})}
+
+					const [semiOutput, semiNumberOutput] =
+						semiLoop.printValuePercentPressure(deepness, duration)
+					const additionalyOutput = await additionaly(
+						semiNumberOutput
+					)
+					const output: msgType[] = _.concat(
+						semiOutput,
+						additionalyOutput,
+						loopOutput
+					)
+					if (_.isEqual(output, DGSCycleStore.output)) return
+					const msgTextClassArray = Array.from(
+						document.getElementsByClassName(classes["msg-text"])
+					)
+					msgTextClassArray.forEach((e) => {
+						e.classList.remove(classes["awake-msg"])
+						void e.getBoundingClientRect().width
+						e.classList.add(classes["destroy-msg"])
+					})
+					setTimeout(() => {
+						DGSCycleStore.setOutput(output)
+						msgTextClassArray.forEach((e) => {
+							e.classList.remove(classes["destroy-msg"])
+							void e.getBoundingClientRect().width
+							e.classList.add(classes["awake-msg"])
+						})
+					}, 100)
+				} else {
+					window.electron.sendAlert("Заполните все поля")
+				}
+			}}
+			className={classes.root}
+			output={DGSCycleStore.output.map((e, i) => {
+				return (
+					<div
+						className={[
+							e.main ? classes["main-msg-text"] : "",
+							classes["msg-text"],
+							classes["awake-msg"],
+						].join(" ")}
+						key={i}
+					>
+						{e.text}
+					</div>
+				)
+			})}
+		>
+			<div className={classes.input_wrapper}>
+				<Label>Укажите рабочую глубину</Label>
+				<Input
+					after='От 12 до 60 паскалей'
+					type='number'
+					min={12}
+					max={60}
+					value={deepness || ""}
+					maxLength={2}
+					onChange={deepnessHandler}
+				/>
 			</div>
-		</div>
+
+			<div className={classes.input_wrapper}>
+				<Label>Укажите время работы на грунте</Label>
+				<Input
+					after='От 30 до 360 минут'
+					type='number'
+					min={30}
+					max={360}
+					value={duration || ""}
+					maxLength={3}
+					onChange={durationHandler}
+				/>
+			</div>
+			<div className={classes.input_wrapper}>
+				<Label>Выберите сложность погружения</Label>
+				<div className={classes.radio_wrapper}>
+					<Input
+						type='radio'
+						value='normal'
+						text='Нормальное'
+						onChange={difficaltyHandler}
+						checkValue={difficalty}
+					/>
+					<Input
+						type='radio'
+						value='hard'
+						text='Тяжелое'
+						onChange={difficaltyHandler}
+						checkValue={difficalty}
+					/>
+				</div>
+			</div>
+		</ToolPageLayout>
 	)
 }
 export default observer(DGSCyclePage)

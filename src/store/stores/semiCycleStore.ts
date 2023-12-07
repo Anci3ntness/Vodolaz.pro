@@ -1,12 +1,14 @@
 import { makeAutoObservable } from "mobx"
 
+import msgType from "../../types/output-msg.type"
+
 export interface ISemiCycleStore {}
 
 class SemiCycleStore implements ISemiCycleStore {
 	private _density?: number
 	private _volume?: number
 	private _pressure?: number
-	private _output: string[]
+	private _output: msgType[]
 	constructor() {
 		this._density = undefined
 		this._volume = undefined

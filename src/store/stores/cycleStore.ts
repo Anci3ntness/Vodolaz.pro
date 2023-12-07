@@ -1,12 +1,14 @@
 import { makeAutoObservable } from "mobx"
 
+import msgType from "../../types/output-msg.type"
+
 export interface ICycleStore {}
 
 class CycleStore implements ICycleStore {
 	private _difficalty?: string
 	private _volume?: number
 	private _pressure?: number
-	private _output: string[]
+	private _output: msgType[]
 	constructor() {
 		this._difficalty = undefined
 		this._volume = undefined

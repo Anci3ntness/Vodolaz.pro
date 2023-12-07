@@ -73,6 +73,8 @@ function ChatBot() {
 						onChange={({ target }) => {
 							setInputValue(target.value)
 						}}
+						disabled={loading}
+						style={loading ? { backgroundColor: "#d9d9d9" } : {}}
 					/>
 					<Button
 						type='submit'
@@ -98,7 +100,7 @@ function ChatBot() {
 							})
 							setInputValue("")
 							setLoading(true)
-							bot.createChatCompletion(validValue)
+							bot.createChatCompletion(validValue, msgArray)
 								.then((res) =>
 									setMsgArray((prev) => {
 										const resMsg = {

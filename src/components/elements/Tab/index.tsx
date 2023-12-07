@@ -27,7 +27,13 @@ export default function Tab({ title, route }: tTab) {
 			className={classes.root}
 			style={
 				active
-					? { borderBottom: 0, backgroundColor: "var(--child-color)" }
+					? {
+							borderBottom: 0,
+							backgroundColor: "#000",
+							color: "white",
+							borderBottomRightRadius: 0,
+							borderBottomLeftRadius: 0,
+					  }
 					: {}
 			}
 			onClick={(e) => {
@@ -36,7 +42,9 @@ export default function Tab({ title, route }: tTab) {
 			}}
 			title={title}
 		>
-			<div className={classes.title}>{title}</div>
+			<div className={classes.title}>
+				<span>{title}</span>
+			</div>
 		</div>
 	)
 }

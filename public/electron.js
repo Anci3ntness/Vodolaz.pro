@@ -1,11 +1,4 @@
-const {
-	BrowserWindow,
-	app,
-	shell,
-	ipcMain,
-	dialog,
-	session,
-} = require("electron")
+const { BrowserWindow, app, shell, ipcMain, dialog } = require("electron")
 
 const path = require("path")
 const isDev = require("electron-is-dev")
@@ -19,7 +12,7 @@ function createWindow(id) {
 		minHeight: 640,
 		resizable: true,
 		fullscreenable: true,
-		backgroundColor: "#fff",
+		backgroundColor: "#435f83",
 		webPreferences: {
 			contextIsolation: true,
 			nodeIntegration: false,
@@ -30,7 +23,7 @@ function createWindow(id) {
 	})
 	win.removeMenu()
 
-	const urlDom = "http://localhost:8080#"
+	const urlDom = "http://localhost:3003#"
 	const fileDom = `file://${path.join(__dirname, "../build/index.html#")}`
 
 	const appPath = isDev ? urlDom : fileDom
@@ -39,29 +32,6 @@ function createWindow(id) {
 	if (isDev) {
 		win.webContents.openDevTools()
 	}
-
-	// const filter = {
-	// 	urls: ["*://weatherwidget.io/*", "*://api.openai.com/*"],
-	// }
-	// const corsHeaderValue = isDev
-	// 	? "http://localhost:8080"
-	// 	: "capacitor-electron://-"
-
-	// session.defaultSession.webRequest.onBeforeSendHeaders(
-	// 	filter,
-	// 	(details, callback) => {
-	// 		details.requestHeaders["Access-Control-Allow-Origin"] = ["*"]
-	// 		callback({ requestHeaders: details.requestHeaders })
-	// 	}
-	// )
-
-	// session.defaultSession.webRequest.onHeadersReceived(
-	// 	filter,
-	// 	(details, callback) => {
-	// 		details.responseHeaders["Access-Control-Allow-Origin"] = ["*"]
-	// 		callback({ responseHeaders: details.responseHeaders })
-	// 	}
-	// )
 
 	win.on("closed", () => (win = null))
 
@@ -102,7 +72,7 @@ app.on("web-contents-created", (event, contents) => {
 	contents.on("will-navigate", (event, navigationUrl) => {
 		const parsedUrl = new URL(navigationUrl)
 
-		if (parsedUrl.origin !== "https://localhost:8080") {
+		if (parsedUrl.origin !== "https://localhost:3003") {
 			event.preventDefault()
 		}
 	})
@@ -110,7 +80,7 @@ app.on("web-contents-created", (event, contents) => {
 app.on("web-contents-created", (event, contents) => {
 	contents.setWindowOpenHandler(({ url }) => {
 		const parsedUrl = new URL(url)
-		if (parsedUrl.origin !== "https://localhost:8080") {
+		if (parsedUrl.origin !== "https://localhost:3003") {
 			setImmediate(() => {
 				shell.openExternal(url)
 			})
@@ -119,4 +89,3 @@ app.on("web-contents-created", (event, contents) => {
 		return { action: "deny" }
 	})
 })
-app.commandLine.appendSwitch("lang", "EN")

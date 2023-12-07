@@ -1,6 +1,7 @@
 {
     "name": "vodolaz.pro",
-    "version": "0.1.0",
+    "description": "Приложение для расчета данных, связанных с водолазами.",
+    "version": "1.0.0",
     "main": "public/electron.js",
     "private": true,
     "homepage": "./",
@@ -30,6 +31,7 @@
         "xlsx": "^0.18.5"
     },
     "devDependencies": {
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "concurrently": "^8.2.2",
         "electron": "^27.0.4",
         "electron-builder": "^24.6.4",
@@ -45,7 +47,7 @@
         "start": " react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "dev": "concurrently \"npm start\" \"wait-on tcp:127.0.0.1:8080 && electron .\"",
+        "dev": "concurrently \"npm start\" \"wait-on tcp:127.0.0.1:3003 && electron .\"",
         "electron-build": "npm run build && electron-builder"
     },
     "eslintConfig": {
