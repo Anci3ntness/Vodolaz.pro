@@ -65,7 +65,7 @@ function DGSCyclePage() {
 			}
 			output.push({
 				main: true,
-				text: "Учитывая декомпрессионные обязательства: ",
+				text: "Учитывая декомпрессионные обязательства",
 			})
 			if (maxDecom[0] === 0) {
 				output.push({
@@ -178,7 +178,7 @@ function DGSCyclePage() {
 			<div className={classes.input_wrapper}>
 				<Label>Укажите рабочую глубину</Label>
 				<Input
-					after='От 12 до 60 паскалей'
+					after='От 12 до 60 метров'
 					type='number'
 					min={12}
 					max={60}

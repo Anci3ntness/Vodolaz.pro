@@ -11,7 +11,7 @@ export default class OpenAiHandler {
 
 	constructor() {
 		this.openai = new OpenAI({
-			apiKey: "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",
+			apiKey: "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",
 			dangerouslyAllowBrowser: true,
 			maxRetries: 1,
 		})

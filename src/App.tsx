@@ -4,6 +4,7 @@ import { HashRouter } from "react-router-dom"
 import AppRouter from "./components/default/AppRouter"
 import indexLayout from "./layouts/indexLayout"
 
+//Подключается зависимости для работы с router dom
 function App() {
 	const BaseLayout = ({ children }: PropsWithChildren) => (
 		<Fragment>{children}</Fragment>
@@ -11,7 +12,7 @@ function App() {
 	let Layout = BaseLayout
 
 	Layout = indexLayout
-
+	//Создается фрагмент для работы с лейаутом приложения
 	return (
 		<HashRouter>
 			<Layout>
@@ -19,6 +20,7 @@ function App() {
 			</Layout>
 		</HashRouter>
 	)
+	//Возвращается обьект приложения, обернутый в route-контроллер и наш лейаут
 }
 
 export default App

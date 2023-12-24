@@ -1,6 +1,9 @@
 import { makeAutoObservable } from "mobx"
 
-import { customChatResponse } from "../../types/chat-gpt.type"
+import {
+	chatResponceMessageRole,
+	customChatResponse,
+} from "../../types/chat-gpt.type"
 
 export interface IChatStore {
 	msgArray: customChatResponse[]
@@ -9,7 +12,16 @@ export interface IChatStore {
 class ChatStore implements IChatStore {
 	private _msgArray: customChatResponse[]
 	constructor() {
-		this._msgArray = []
+		this._msgArray = [
+			{
+				id: `chatcmpl-${new Date().getTime()}`,
+				created: new Date().getTime(),
+				message: {
+					content: "Здравствуйте, чем я могу Вам сегодня помочь?",
+					role: chatResponceMessageRole.system,
+				},
+			},
+		]
 		makeAutoObservable(this)
 	}
 	get msgArray() {

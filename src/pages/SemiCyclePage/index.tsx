@@ -64,7 +64,7 @@ function SemiCyclePage() {
 
 		output.push({
 			main: true,
-			text: "Учитывая декомпрессионные обязательства: ",
+			text: "Учитывая декомпрессионные обязательства",
 		})
 		if (maxDecom[0] === 0) {
 			output.push({

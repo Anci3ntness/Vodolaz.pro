@@ -43,6 +43,12 @@ function ReverseCyclePage() {
 					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					const [output, numberOutput] =
 						semiLoop.printValuePercentPressure(deepness, duration)
+					if (_.isEqual(numberOutput, [-1, -1])) {
+						output.push({
+							main: false,
+							text: "Нет подходящего снаряжения.",
+						})
+					}
 					if (_.isEqual(output, ReverseCycleStore.output)) return
 					const msgTextClassArray = Array.from(
 						document.getElementsByClassName(classes["msg-text"])
