@@ -7,22 +7,30 @@ import {
 } from "../types/chat-gpt.type"
 
 export default class OpenAiHandler {
-	private openai
+	async getModelsList() {
+		try {
+			const response: Promise<any> = await window.electron.invoke(
+				"invokeAi",
+				["getModelsList"]
+			)
 
-	constructor() {
-		this.openai = new OpenAI({
-			apiKey: "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",
-			dangerouslyAllowBrowser: true,
-			maxRetries: 1,
-		})
-	}
-	async getModelesList() {
-		const response = await this.openai.models.list()
-		return response
+			return response
+		} catch (err) {
+			console.error(err)
+			return {}
+		}
 	}
 	async getModel(model: GPTModel) {
-		const response = await this.openai.models.retrieve(model)
-		return response
+		try {
+			const response: Promise<any> = await window.electron.invoke(
+				"invokeAi",
+				["getModel", model]
+			)
+			return response
+		} catch (err) {
+			console.error(err)
+			return {}
+		}
 	}
 	async createChatCompletion(
 		message: string,
@@ -52,10 +60,13 @@ export default class OpenAiHandler {
 				model: GPTModel["gpt-3.5-turbo"],
 				messages: messages,
 			}
-			const completion = await this.openai.chat.completions.create(params)
-			return completion
+			const response: Promise<any> = await window.electron.invoke(
+				"invokeAi",
+				["createChatCompletion", params]
+			)
+			return response
 		} catch (err) {
-			console.log(err)
+			console.error(err)
 			return {
 				id: `chatcmpl-${new Date().getTime()}`,
 				created: new Date().getTime(),
