@@ -1,24 +1,30 @@
 import { makeAutoObservable } from "mobx"
 
 import msgType from "../../types/output-msg.type"
+import eZapas from "../../types/zapas.enum"
 
 export interface IReverseCycleStore {}
 
 class ReverseCycleStore implements IReverseCycleStore {
 	private _duration?: number
 	private _deepness?: number
+	private _zapas: number[]
 	private _output: msgType[]
 	constructor() {
 		this._duration = undefined
 		this._deepness = undefined
-		makeAutoObservable(this)
+		this._zapas = [eZapas["30%"]]
 		this._output = []
+		makeAutoObservable(this)
 	}
 	get duration() {
 		return this._duration
 	}
 	get deepness() {
 		return this._deepness
+	}
+	get zapas() {
+		return this._zapas
 	}
 	get output() {
 		return this._output
@@ -30,6 +36,10 @@ class ReverseCycleStore implements IReverseCycleStore {
 	setDeepness(value: typeof this._deepness) {
 		this._deepness = value
 	}
+	setZapas(value: typeof this._zapas) {
+		this._zapas = value
+	}
+
 	setOutput(value: typeof this._output) {
 		this._output = value
 	}

@@ -10,6 +10,12 @@
 			justify-content: space-between;
 			gap: 0.5em;
 		}
+
+		.checkbox_wrapper {
+			display: flex;
+			justify-content: space-between;
+			gap: 0.5em;
+		}
 	}
 
 	.msg-text {
@@ -47,5 +53,10 @@
 	100% {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+@media screen and (max-width: 1080px) {
+	.checkbox_wrapper {
+		flex-direction: column;
 	}
 }

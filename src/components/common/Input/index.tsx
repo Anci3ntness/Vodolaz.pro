@@ -1,3 +1,4 @@
+import _ from "lodash"
 import React from "react"
 
 import classes from "./index.module.scss"
@@ -63,6 +64,21 @@ export default function Input({
 						}}
 						{...props}
 					/>
+				)
+			case "checkbox":
+				return (
+					<div className={classes.checkbox_wrapper}>
+						<input
+							type='checkbox'
+							className={classes.checkbox}
+							checked={_.includes(checkValue, props.value)}
+							onChange={(event) => {
+								if (!!onChange) onChange(event)
+							}}
+							{...props}
+						/>
+						<label className={classes.checkbox_label}>{text}</label>
+					</div>
 				)
 
 			default:

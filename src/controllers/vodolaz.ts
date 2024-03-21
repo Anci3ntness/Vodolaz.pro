@@ -9,9 +9,10 @@ class ClosedLoop {
 	printTime(
 		balloonVolume: number,
 		pressure: number,
-		difficulty: string
+		difficulty: string,
+		zapas: number
 	): msgType[] {
-		let timeInMinute: number = pressure * balloonVolume * 0.7
+		let timeInMinute: number = pressure * balloonVolume * zapas
 		let output: msgType[] = []
 		if (difficulty === this.EASY) {
 			let a: number = Math.floor(timeInMinute / 30)
@@ -43,7 +44,12 @@ class ClosedLoop {
 		return output
 	}
 
-	printVolumePlusPressure(time: number, difficulty: string): msgType[] {
+	printVolumePlusPressure(
+		time: number,
+		difficulty: string,
+		zapas: number
+	): msgType[] {
+		let array: number[] = [7, 10, 12, 14, 18, 20, 24]
 		let doubleTime: number = 0
 		let flag: boolean
 		let hasBalon: boolean = false
@@ -65,10 +71,10 @@ class ClosedLoop {
 			main: true,
 			text: "Для замкнутого цикла",
 		})
-		for (let balloonVolume = 0; balloonVolume < 2; balloonVolume++) {
+		array.forEach((balloonVolume) => {
 			flag = false
 			for (let pressure = 200; pressure < 300; pressure++) {
-				if (doubleTime <= pressure * balloonVolume * 0.7 && !flag) {
+				if (doubleTime <= pressure * balloonVolume * zapas && !flag) {
 					flag = true
 					hasBalon = true
 					output.push({
@@ -77,7 +83,7 @@ class ClosedLoop {
 					})
 				}
 			}
-		}
+		})
 		if (!hasBalon)
 			output.push({
 				main: false,
@@ -90,11 +96,12 @@ class SemiClosedLoop {
 	printDepthAndTime(
 		value: number,
 		fullPercent: number,
-		pressure: number
+		pressure: number,
+		zapas: number
 	): [msgType[], number[]] {
 		let output: msgType[] = []
 		const percent: number = fullPercent / 100
-		let timeInMinute: number = pressure * value * 0.7
+		let timeInMinute: number = pressure * value * zapas
 		timeInMinute = timeInMinute / (3 / percent)
 		output.push({
 			main: false,
@@ -127,7 +134,8 @@ class SemiClosedLoop {
 
 	printValuePercentPressure(
 		depth: number,
-		timeInMinute: number
+		timeInMinute: number,
+		zapas: number
 	): [msgType[], number[]] {
 		let flag: boolean = false
 		let coefficient: number
@@ -145,7 +153,7 @@ class SemiClosedLoop {
 			return [output, numberOutput]
 		}
 
-		const valuePressure: number = (timeInMinute * 3) / (percent * 0.7)
+		const valuePressure: number = (timeInMinute * 3) / (percent * zapas)
 		let value: number = 0
 		let pressure: number = 0
 		output.push({

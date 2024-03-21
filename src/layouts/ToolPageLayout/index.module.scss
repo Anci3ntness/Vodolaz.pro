@@ -10,22 +10,32 @@
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
+
 	.input_area {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		width: 20em;
 		align-items: center;
-		.input_place {
-			padding: 1em;
+		max-width: 35em;
+		.input_wrapper {
 			display: flex;
-			flex-direction: column;
-			max-height: 32em;
-			gap: 2em;
-			justify-content: space-between;
+			flex-direction: row;
 			overflow-y: auto;
 			overflow-x: hidden;
+			width: 100%;
+			.input_place {
+				flex: 1;
+				padding: 1em;
+				display: flex;
+				flex-direction: column;
+				max-height: 32em;
+				gap: 2em;
+				justify-content: space-between;
+				overflow-y: auto;
+				overflow-x: hidden;
+			}
 		}
+
 		.submit {
 			flex: 0 1 1;
 			flex-shrink: 0;
@@ -38,13 +48,13 @@
 	.output_area {
 		display: flex;
 		background-color: rgba(80, 125, 149, 0.8);
-
+		z-index: 1;
 		flex: 1;
 		border-radius: 1em;
 		flex-direction: column;
 		padding: 2em;
 		overflow-y: auto;
-		min-width: 20em;
+		min-width: 15em;
 		color: #435f83;
 		font-weight: 500;
 	}

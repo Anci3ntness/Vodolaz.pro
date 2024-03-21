@@ -12,6 +12,7 @@ import {
 import ToolPageLayout from "../../layouts/ToolPageLayout"
 import { useStore } from "../../store/useStore"
 import msgType from "../../types/output-msg.type"
+import eZapas from "../../types/zapas.enum"
 import classes from "./index.module.scss"
 
 function DGSCyclePage() {
@@ -23,6 +24,7 @@ function DGSCyclePage() {
 	const [difficalty, setDifficalty] = useState(DGSCycleStore.difficalty)
 	const [deepness, setDeepness] = useState(DGSCycleStore.deepness!)
 	const [duration, setDuration] = useState(DGSCycleStore.duration!)
+	const [zapas, setZapas] = useState(DGSCycleStore.zapas)
 
 	function difficaltyHandler(event: ChangeEvent<HTMLInputElement>) {
 		setDifficalty(event.target.value)
@@ -32,6 +34,15 @@ function DGSCyclePage() {
 	}
 	function durationHandler(event: ChangeEvent<HTMLInputElement>) {
 		setDuration(Number(event.target.value))
+	}
+	function zapasHandler(event: ChangeEvent<HTMLInputElement>) {
+		setZapas([Number(event.target.value)])
+		// const nw = [...old]
+		// 	const value = Number(event.target.value)
+		// 	if (_.includes(nw, value)) {
+		// 		_.pull(nw, value)
+		// 	} else nw.push(value)
+		// 	return nw
 	}
 
 	async function additionaly(percentPressure: number[]): Promise<msgType[]> {
@@ -117,19 +128,28 @@ function DGSCyclePage() {
 		DGSCycleStore.setDuration(duration)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [duration])
+	useEffect(() => {
+		DGSCycleStore.setZapas(zapas)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [zapas])
 
 	return (
 		<ToolPageLayout
 			btnOnClick={async (event) => {
 				event.preventDefault()
-				if (!!deepness && !!duration && !!difficalty) {
+				if (!!deepness && !!duration && !!difficalty && !!zapas) {
 					const loopOutput = loop.printVolumePlusPressure(
 						duration,
-						difficalty
+						difficalty,
+						zapas[0]
 					)
 
 					const [semiOutput, semiNumberOutput] =
-						semiLoop.printValuePercentPressure(deepness, duration)
+						semiLoop.printValuePercentPressure(
+							deepness,
+							duration,
+							zapas[0]
+						)
 					const additionalyOutput = await additionaly(
 						semiNumberOutput
 					)
@@ -174,6 +194,27 @@ function DGSCyclePage() {
 					</div>
 				)
 			})}
+			semiChildren={
+				<div className={classes.input_wrapper}>
+					<Label>Запас ДГС</Label>
+					<div className={classes.checkbox_wrapper}>
+						<Input
+							type='checkbox'
+							text='30%'
+							value={eZapas["30%"]}
+							onChange={zapasHandler}
+							checkValue={zapas}
+						/>
+						<Input
+							type='checkbox'
+							text='20%'
+							value={eZapas["20%"]}
+							onChange={zapasHandler}
+							checkValue={zapas}
+						/>
+					</div>
+				</div>
+			}
 		>
 			<div className={classes.input_wrapper}>
 				<Label>Укажите рабочую глубину</Label>
