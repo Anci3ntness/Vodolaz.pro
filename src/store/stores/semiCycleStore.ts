@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx"
 
+import { eZapas } from "../../types/enums"
 import msgType from "../../types/output-msg.type"
-import eZapas from "../../types/zapas.enum"
 
 export interface ISemiCycleStore {}
 

@@ -106,14 +106,31 @@ function ChatBot() {
 										const resMsg = {
 											id: res.id,
 											created: res.created,
-											message: res.choices[0].message,
+											message: {
+												...res.choices[0].message,
+												content:
+													res.choices[0].message
+														.content +
+													"\nP.S. Не несём ответственности за выданный ответ, а лишь предоставляем информацию",
+											},
 										}
 										if (typeof resMsg === "undefined")
 											return prev
 										return [resMsg, ...prev]
 									})
 								)
-								.catch((err) => console.error(err))
+								.catch((errMsg) =>
+									setMsgArray((prev) => {
+										const resMsg = {
+											id: errMsg.id,
+											created: errMsg.created,
+											message: errMsg.choices[0].message,
+										}
+										if (typeof resMsg === "undefined")
+											return prev
+										return [resMsg, ...prev]
+									})
+								)
 								.finally(() => {
 									setLoading(false)
 								})

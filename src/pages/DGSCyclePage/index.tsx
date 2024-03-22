@@ -11,8 +11,8 @@ import {
 } from "../../controllers/vodolaz"
 import ToolPageLayout from "../../layouts/ToolPageLayout"
 import { useStore } from "../../store/useStore"
+import { eWeatherConditions, eZapas } from "../../types/enums"
 import msgType from "../../types/output-msg.type"
-import eZapas from "../../types/zapas.enum"
 import classes from "./index.module.scss"
 
 function DGSCyclePage() {
@@ -25,6 +25,9 @@ function DGSCyclePage() {
 	const [deepness, setDeepness] = useState(DGSCycleStore.deepness!)
 	const [duration, setDuration] = useState(DGSCycleStore.duration!)
 	const [zapas, setZapas] = useState(DGSCycleStore.zapas)
+	const [weatherConditions, setWeatherConditions] = useState(
+		DGSCycleStore.weatherConditions
+	)
 
 	function difficaltyHandler(event: ChangeEvent<HTMLInputElement>) {
 		setDifficalty(event.target.value)
@@ -37,12 +40,31 @@ function DGSCyclePage() {
 	}
 	function zapasHandler(event: ChangeEvent<HTMLInputElement>) {
 		setZapas([Number(event.target.value)])
-		// const nw = [...old]
-		// 	const value = Number(event.target.value)
-		// 	if (_.includes(nw, value)) {
-		// 		_.pull(nw, value)
-		// 	} else nw.push(value)
-		// 	return nw
+	}
+	function weatherConditionsHandler(event: ChangeEvent<HTMLInputElement>) {
+		setWeatherConditions((old) => {
+			const nw = [...old]
+			const value = event.target.value
+			if (_.includes(nw, value)) {
+				_.pull(nw, value)
+			} else nw.push(value)
+			return nw
+		})
+	}
+	function checkWeatherConditions(arr: string[]) {
+		if (
+			_.includes(arr, eWeatherConditions.course) ||
+			_.includes(arr, eWeatherConditions.danger)
+		) {
+			return 0.15
+		}
+		if (
+			_.includes(arr, eWeatherConditions.cold) ||
+			_.includes(arr, eWeatherConditions.radiation)
+		) {
+			return 0.1
+		}
+		return 0
 	}
 
 	async function additionaly(percentPressure: number[]): Promise<msgType[]> {
@@ -132,6 +154,10 @@ function DGSCyclePage() {
 		DGSCycleStore.setZapas(zapas)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [zapas])
+	useEffect(() => {
+		DGSCycleStore.setWeatherConditions(weatherConditions)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [weatherConditions])
 
 	return (
 		<ToolPageLayout
@@ -148,7 +174,8 @@ function DGSCyclePage() {
 						semiLoop.printValuePercentPressure(
 							deepness,
 							duration,
-							zapas[0]
+							zapas[0],
+							checkWeatherConditions(weatherConditions)
 						)
 					const additionalyOutput = await additionaly(
 						semiNumberOutput
@@ -195,25 +222,63 @@ function DGSCyclePage() {
 				)
 			})}
 			semiChildren={
-				<div className={classes.input_wrapper}>
-					<Label>Запас ДГС</Label>
-					<div className={classes.checkbox_wrapper}>
-						<Input
-							type='checkbox'
-							text='30%'
-							value={eZapas["30%"]}
-							onChange={zapasHandler}
-							checkValue={zapas}
-						/>
-						<Input
-							type='checkbox'
-							text='20%'
-							value={eZapas["20%"]}
-							onChange={zapasHandler}
-							checkValue={zapas}
-						/>
+				<>
+					<div className={classes.input_wrapper}>
+						<Label>Запас ДГС</Label>
+						<div className={classes.checkbox_wrapper}>
+							<Input
+								type='checkbox'
+								text='30%'
+								value={eZapas["30%"]}
+								onChange={zapasHandler}
+								checkValue={zapas}
+							/>
+							<Input
+								type='checkbox'
+								text='20%'
+								value={eZapas["20%"]}
+								onChange={zapasHandler}
+								checkValue={zapas}
+							/>
+						</div>
 					</div>
-				</div>
+					<div className={classes.input_wrapper}>
+						<Label>Выбор маркеров опасности</Label>
+						<div
+							className={classes.checkbox_wrapper}
+							style={{ flexDirection: "column" }}
+						>
+							<Input
+								type='checkbox'
+								text='Холодная вода'
+								value={eWeatherConditions.cold}
+								onChange={weatherConditionsHandler}
+								checkValue={weatherConditions}
+							/>
+							<Input
+								type='checkbox'
+								text='Опасные предметы'
+								value={eWeatherConditions.danger}
+								onChange={weatherConditionsHandler}
+								checkValue={weatherConditions}
+							/>
+							<Input
+								type='checkbox'
+								text='Химическое загрязнение'
+								value={eWeatherConditions.radiation}
+								onChange={weatherConditionsHandler}
+								checkValue={weatherConditions}
+							/>
+							<Input
+								type='checkbox'
+								text='Течение'
+								value={eWeatherConditions.course}
+								onChange={weatherConditionsHandler}
+								checkValue={weatherConditions}
+							/>
+						</div>
+					</div>
+				</>
 			}
 		>
 			<div className={classes.input_wrapper}>

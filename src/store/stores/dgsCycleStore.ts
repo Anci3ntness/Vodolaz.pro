@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx"
 
+import { eZapas } from "../../types/enums"
 import msgType from "../../types/output-msg.type"
-import eZapas from "../../types/zapas.enum"
 
 export interface IDGSCycleStore {}
 
@@ -10,12 +10,14 @@ class DGSCycleStore implements IDGSCycleStore {
 	private _deepness?: number
 	private _difficalty?: string
 	private _zapas: number[]
+	private _weatherConditions: string[]
 	private _output: msgType[]
 	constructor() {
 		this._difficalty = undefined
 		this._duration = undefined
 		this._deepness = undefined
 		this._zapas = [eZapas["30%"]]
+		this._weatherConditions = []
 		this._output = []
 		makeAutoObservable(this)
 	}
@@ -34,6 +36,9 @@ class DGSCycleStore implements IDGSCycleStore {
 	get output() {
 		return this._output
 	}
+	get weatherConditions() {
+		return this._weatherConditions
+	}
 	setDifficalty(value: typeof this._difficalty) {
 		this._difficalty = value
 	}
@@ -45,6 +50,9 @@ class DGSCycleStore implements IDGSCycleStore {
 	}
 	setZapas(value: typeof this._zapas) {
 		this._zapas = value
+	}
+	setWeatherConditions(value: typeof this._weatherConditions) {
+		this._weatherConditions = value
 	}
 
 	setOutput(value: typeof this._output) {

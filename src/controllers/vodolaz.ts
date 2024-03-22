@@ -135,7 +135,8 @@ class SemiClosedLoop {
 	printValuePercentPressure(
 		depth: number,
 		timeInMinute: number,
-		zapas: number
+		zapas: number,
+		weatherConditions?: number
 	): [msgType[], number[]] {
 		let flag: boolean = false
 		let coefficient: number
@@ -152,8 +153,14 @@ class SemiClosedLoop {
 			const numberOutput = [-1, -1, -1]
 			return [output, numberOutput]
 		}
+		let valuePressure: number
+		if (!!weatherConditions && weatherConditions !== 0) {
+			valuePressure = (timeInMinute * 3) / (percent * zapas)
+			valuePressure = valuePressure - valuePressure * (1 - zapas)
+			valuePressure = valuePressure + valuePressure * weatherConditions
+			valuePressure = valuePressure + valuePressure * (1 - zapas)
+		} else valuePressure = (timeInMinute * 3) / (percent * zapas)
 
-		const valuePressure: number = (timeInMinute * 3) / (percent * zapas)
 		let value: number = 0
 		let pressure: number = 0
 		output.push({

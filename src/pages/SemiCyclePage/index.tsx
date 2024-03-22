@@ -7,8 +7,8 @@ import Label from "../../components/common/Label"
 import { SemiClosedLoop, convertToMatrix } from "../../controllers/vodolaz"
 import ToolPageLayout from "../../layouts/ToolPageLayout"
 import { useStore } from "../../store/useStore"
+import { eZapas } from "../../types/enums"
 import msgType from "../../types/output-msg.type"
-import eZapas from "../../types/zapas.enum"
 import classes from "./index.module.scss"
 
 function SemiCyclePage() {

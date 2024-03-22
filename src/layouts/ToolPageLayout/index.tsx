@@ -28,9 +28,12 @@ function ToolPageLayout({
 				<div className={classes.input_wrapper}>
 					<div className={classes.input_place}>{children}</div>
 					{semiChildren && (
-						<div className={classes.input_place}>
-							{semiChildren}
-						</div>
+						<>
+							<div className={classes.divider}></div>
+							<div className={classes.input_place}>
+								{semiChildren}
+							</div>
+						</>
 					)}
 				</div>
 

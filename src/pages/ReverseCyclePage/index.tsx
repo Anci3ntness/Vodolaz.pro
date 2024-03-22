@@ -7,7 +7,7 @@ import Label from "../../components/common/Label"
 import { SemiClosedLoop } from "../../controllers/vodolaz"
 import ToolPageLayout from "../../layouts/ToolPageLayout"
 import { useStore } from "../../store/useStore"
-import eZapas from "../../types/zapas.enum"
+import { eZapas } from "../../types/enums"
 import classes from "./index.module.scss"
 
 function ReverseCyclePage() {

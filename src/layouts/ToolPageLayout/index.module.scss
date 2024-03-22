@@ -16,7 +16,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		max-width: 35em;
+		max-width: 45em;
 		.input_wrapper {
 			display: flex;
 			flex-direction: row;
@@ -30,9 +30,15 @@
 				flex-direction: column;
 				max-height: 32em;
 				gap: 2em;
-				justify-content: space-between;
 				overflow-y: auto;
 				overflow-x: hidden;
+			}
+			.divider {
+				padding: 0.05em;
+				height: 95%;
+				background-color: white;
+				border-radius: 0.125em;
+				align-self: center;
 			}
 		}
 

@@ -36,49 +36,52 @@ export default class OpenAiHandler {
 		message: string,
 		context?: customChatResponse[]
 	) {
-		try {
-			const cont =
-				context
-					?.slice(0, 2)
-					.reverse()
-					.map(
-						(
-							e
-						): OpenAI.Chat.Completions.ChatCompletionMessageParam => {
-							return {
-								role: "system",
-								content: e.message?.content || "",
+		return new Promise<OpenAI.ChatCompletion>(async (resolve, reject) => {
+			try {
+				const cont =
+					context
+						?.slice(0, 2)
+						.reverse()
+						.map(
+							(
+								e
+							): OpenAI.Chat.Completions.ChatCompletionMessageParam => {
+								return {
+									role: "system",
+									content: e.message?.content || "",
+								}
 							}
-						}
-					) || []
-			const messages = [
-				...cont,
-				{ role: chatResponceMessageRole.user, content: message },
-			]
+						) || []
+				const messages = [
+					...cont,
+					{ role: chatResponceMessageRole.user, content: message },
+				]
 
-			const params: OpenAI.Chat.ChatCompletionCreateParamsNonStreaming = {
-				model: GPTModel["gpt-3.5-turbo"],
-				messages: messages,
-			}
-			const response: Promise<any> = await window.electron.invoke(
-				"invokeAi",
-				["createChatCompletion", params]
-			)
-			return response
-		} catch (err) {
-			console.error(err)
-			return {
-				id: `chatcmpl-${new Date().getTime()}`,
-				created: new Date().getTime(),
-				choices: [
+				const params: OpenAI.Chat.ChatCompletionCreateParamsNonStreaming =
 					{
-						message: {
-							content:
-								"Произошла ошибка, проверьте ваше подключение",
+						model: GPTModel["gpt-3.5-turbo"],
+						messages: messages,
+					}
+				const response: Promise<any> = await window.electron.invoke(
+					"invokeAi",
+					["createChatCompletion", params]
+				)
+				resolve(response)
+			} catch (err: any) {
+				console.error(err)
+				reject({
+					id: `chatcmpl-${new Date().getTime()}`,
+					created: new Date().getTime(),
+					choices: [
+						{
+							message: {
+								content:
+									"Произошла ошибка, проверьте ваше подключение",
+							},
 						},
-					},
-				],
+					],
+				})
 			}
-		}
+		})
 	}
 }

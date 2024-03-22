@@ -45,6 +45,8 @@
 		font-size: 1.2em;
 		gap: 0.5em;
 		padding: 0.2em;
+		align-items: center;
+		padding-left: 1em;
 		.checkbox {
 			content: "";
 			background-color: white;
@@ -66,7 +68,10 @@
 		.checkbox_label {
 			padding: 0.2em;
 			color: white;
-			text-align: center;
+			text-overflow: ellipsis;
+			text-wrap: nowrap;
+			word-wrap: break-word;
+			overflow: hidden;
 		}
 	}
 }
