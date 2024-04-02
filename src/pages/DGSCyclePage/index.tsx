@@ -164,14 +164,14 @@ function DGSCyclePage() {
 			btnOnClick={async (event) => {
 				event.preventDefault()
 				if (!!deepness && !!duration && !!difficalty && !!zapas) {
-					const loopOutput = loop.printVolumePlusPressure(
+					const loopOutput = loop.printVolumePlusPressureOutput(
 						duration,
 						difficalty,
 						zapas[0]
 					)
 
 					const [semiOutput, semiNumberOutput] =
-						semiLoop.printValuePercentPressure(
+						semiLoop.printValuePercentPressureOutput(
 							deepness,
 							duration,
 							zapas[0],
@@ -181,6 +181,16 @@ function DGSCyclePage() {
 						semiNumberOutput
 					)
 					const output: msgType[] = _.concat(
+						[
+							{
+								main: true,
+								text:
+									"Маркеры опасности увеличили расход смеси на: " +
+									checkWeatherConditions(weatherConditions) *
+										100 +
+									"%",
+							},
+						],
 						semiOutput,
 						additionalyOutput,
 						loopOutput

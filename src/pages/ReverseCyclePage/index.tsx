@@ -7,7 +7,6 @@ import Label from "../../components/common/Label"
 import { SemiClosedLoop } from "../../controllers/vodolaz"
 import ToolPageLayout from "../../layouts/ToolPageLayout"
 import { useStore } from "../../store/useStore"
-import { eZapas } from "../../types/enums"
 import classes from "./index.module.scss"
 
 function ReverseCyclePage() {
@@ -17,21 +16,11 @@ function ReverseCyclePage() {
 
 	const [deepness, setDeepness] = useState(ReverseCycleStore.deepness)
 	const [duration, setDuration] = useState(ReverseCycleStore.duration)
-	const [zapas, setZapas] = useState(ReverseCycleStore.zapas)
 	function deepnessHandler(event: ChangeEvent<HTMLInputElement>) {
 		setDeepness(Number(event.target.value))
 	}
 	function durationHandler(event: ChangeEvent<HTMLInputElement>) {
 		setDuration(Number(event.target.value))
-	}
-	function zapasHandler(event: ChangeEvent<HTMLInputElement>) {
-		setZapas([Number(event.target.value)])
-		// const nw = [...old]
-		// 	const value = Number(event.target.value)
-		// 	if (_.includes(nw, value)) {
-		// 		_.pull(nw, value)
-		// 	} else nw.push(value)
-		// 	return nw
 	}
 
 	useEffect(() => {
@@ -43,23 +32,18 @@ function ReverseCyclePage() {
 		ReverseCycleStore.setDuration(duration)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [duration])
-	useEffect(() => {
-		ReverseCycleStore.setZapas(zapas)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [zapas])
 
 	return (
 		<ToolPageLayout
 			className={classes.root}
 			btnOnClick={(event) => {
 				event.preventDefault()
-				if (!!deepness && !!duration && !!zapas) {
+				if (!!deepness && !!duration) {
 					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					const [output, numberOutput] =
-						semiLoop.printValuePercentPressure(
+						semiLoop.printValuePercentPressureOutput(
 							deepness,
-							duration,
-							zapas[0]
+							duration
 						)
 					if (_.isEqual(numberOutput, [-1, -1])) {
 						output.push({
@@ -102,27 +86,6 @@ function ReverseCyclePage() {
 					</div>
 				)
 			})}
-			semiChildren={
-				<div className={classes.input_wrapper}>
-					<Label>Запас ДГС</Label>
-					<div className={classes.checkbox_wrapper}>
-						<Input
-							type='checkbox'
-							text='30%'
-							value={eZapas["30%"]}
-							onChange={zapasHandler}
-							checkValue={zapas}
-						/>
-						<Input
-							type='checkbox'
-							text='20%'
-							value={eZapas["20%"]}
-							onChange={zapasHandler}
-							checkValue={zapas}
-						/>
-					</div>
-				</div>
-			}
 		>
 			<div className={classes.input_wrapper}>
 				<Label>Укажите длительность погружения в минутах</Label>

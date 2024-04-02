@@ -10,7 +10,7 @@ export default function MainPage() {
 			js.id = id
 			js.src = "https://weatherwidget.io/js/widget.min.js"
 			js.defer = true
-			fjs.parentNode && fjs.parentNode.insertBefore(js, fjs)
+			fjs?.parentNode && fjs.parentNode.insertBefore(js, fjs)
 		})(document, "script", "weatherwidget-io-js")
 	}, [])
 

@@ -7,7 +7,6 @@ import Label from "../../components/common/Label"
 import { SemiClosedLoop, convertToMatrix } from "../../controllers/vodolaz"
 import ToolPageLayout from "../../layouts/ToolPageLayout"
 import { useStore } from "../../store/useStore"
-import { eZapas } from "../../types/enums"
 import msgType from "../../types/output-msg.type"
 import classes from "./index.module.scss"
 
@@ -19,7 +18,6 @@ function SemiCyclePage() {
 	const [volume, setVolume] = useState(SemiCycleStore.volume!)
 	const [density, setDensity] = useState(SemiCycleStore.density!)
 	const [pressure, setPressure] = useState(SemiCycleStore.pressure!)
-	const [zapas, setZapas] = useState(SemiCycleStore.zapas)
 
 	function densityHandler(event: ChangeEvent<HTMLInputElement>) {
 		setDensity(Number(event.target.value))
@@ -30,16 +28,6 @@ function SemiCyclePage() {
 	function pressureHandler(event: ChangeEvent<HTMLInputElement>) {
 		setPressure(Number(event.target.value))
 	}
-	function zapasHandler(event: ChangeEvent<HTMLInputElement>) {
-		setZapas([Number(event.target.value)])
-		// const nw = [...old]
-		// 	const value = Number(event.target.value)
-		// 	if (_.includes(nw, value)) {
-		// 		_.pull(nw, value)
-		// 	} else nw.push(value)
-		// 	return nw
-	}
-
 	async function additionaly(timePlusDepth: number[]): Promise<msgType[]> {
 		let output: msgType[] = []
 		let flag = true
@@ -118,21 +106,17 @@ function SemiCyclePage() {
 		SemiCycleStore.setPressure(pressure)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pressure])
-	useEffect(() => {
-		SemiCycleStore.setZapas(zapas)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [zapas])
+
 	return (
 		<ToolPageLayout
 			btnOnClick={async (event) => {
 				event.preventDefault()
-				if (!!volume && !!pressure && !!density && !!zapas[0]) {
+				if (!!volume && !!pressure && !!density) {
 					const [semiOutput, numberOutput] =
-						semiLoop.printDepthAndTime(
+						semiLoop.printDepthAndTimeOutput(
 							volume,
 							density,
-							pressure,
-							zapas[0]
+							pressure
 						)
 					const additionalyOutput = await additionaly(numberOutput)
 					const output: msgType[] = _.concat(
@@ -175,27 +159,6 @@ function SemiCyclePage() {
 				)
 			})}
 			className={classes.root}
-			semiChildren={
-				<div className={classes.input_wrapper}>
-					<Label>Запас ДГС</Label>
-					<div className={classes.checkbox_wrapper}>
-						<Input
-							type='checkbox'
-							text='30%'
-							value={eZapas["30%"]}
-							onChange={zapasHandler}
-							checkValue={zapas}
-						/>
-						<Input
-							type='checkbox'
-							text='20%'
-							value={eZapas["20%"]}
-							onChange={zapasHandler}
-							checkValue={zapas}
-						/>
-					</div>
-				</div>
-			}
 		>
 			<div className={classes.input_wrapper}>
 				<Label>Введите объем НГДС</Label>

@@ -7,7 +7,6 @@ import Label from "../../components/common/Label"
 import { ClosedLoop } from "../../controllers/vodolaz"
 import ToolPageLayout from "../../layouts/ToolPageLayout"
 import { useStore } from "../../store/useStore"
-import { eZapas } from "../../types/enums"
 import classes from "./index.module.scss"
 
 function CyclePage() {
@@ -18,7 +17,6 @@ function CyclePage() {
 	const [difficalty, setDifficalty] = useState(CycleStore.difficalty)
 	const [volume, setVolume] = useState(CycleStore.volume)
 	const [pressure, setPressure] = useState(CycleStore.pressure)
-	const [zapas, setZapas] = useState(CycleStore.zapas)
 
 	function difficaltyHandler(event: ChangeEvent<HTMLInputElement>) {
 		setDifficalty(event.target.value)
@@ -28,15 +26,6 @@ function CyclePage() {
 	}
 	function pressureHandler(event: ChangeEvent<HTMLInputElement>) {
 		setPressure(Number(event.target.value))
-	}
-	function zapasHandler(event: ChangeEvent<HTMLInputElement>) {
-		setZapas([Number(event.target.value)])
-		// const nw = [...old]
-		// 	const value = Number(event.target.value)
-		// 	if (_.includes(nw, value)) {
-		// 		_.pull(nw, value)
-		// 	} else nw.push(value)
-		// 	return nw
 	}
 
 	useEffect(() => {
@@ -53,22 +42,17 @@ function CyclePage() {
 		CycleStore.setPressure(pressure)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pressure])
-	useEffect(() => {
-		CycleStore.setZapas(zapas)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [zapas])
 
 	return (
 		<ToolPageLayout
 			className={classes.root}
 			btnOnClick={(event) => {
 				event.preventDefault()
-				if (!!volume && !!pressure && !!difficalty && !!zapas) {
-					const output = loop.printTime(
+				if (!!volume && !!pressure && !!difficalty) {
+					const output = loop.printTimeOutput(
 						volume,
 						pressure,
-						difficalty,
-						zapas[0]
+						difficalty
 					)
 
 					if (_.isEqual(output, CycleStore.output)) return
@@ -106,27 +90,6 @@ function CyclePage() {
 					</div>
 				)
 			})}
-			semiChildren={
-				<div className={classes.input_wrapper}>
-					<Label>Запас ДГС</Label>
-					<div className={classes.checkbox_wrapper}>
-						<Input
-							type='checkbox'
-							text='30%'
-							value={eZapas["30%"]}
-							onChange={zapasHandler}
-							checkValue={zapas}
-						/>
-						<Input
-							type='checkbox'
-							text='20%'
-							value={eZapas["20%"]}
-							onChange={zapasHandler}
-							checkValue={zapas}
-						/>
-					</div>
-				</div>
-			}
 		>
 			<div className={classes.input_wrapper}>
 				<Label>Выберите сложность погружения</Label>

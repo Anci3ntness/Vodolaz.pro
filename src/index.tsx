@@ -8,14 +8,20 @@ import store, { StoreContext } from "./store/useStore"
 //Подключаются глобальные стили и state manager (mobx)
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
+
+type tElectron = any
+interface IElectron extends tElectron {
+	invoke: (channel: string, args: any[] | string) => Promise<any>
+}
+
 declare global {
 	interface Window {
-		electron: any
+		electron: IElectron
 	}
 }
 //Декларируется поле electron в глобальный интерфейс Window для корректной работы typescript с preload-функциями электрона
 
-function AppWithProvider() {
+export function AppWithProvider() {
 	return (
 		<StoreContext.Provider value={store}>
 			<App />
