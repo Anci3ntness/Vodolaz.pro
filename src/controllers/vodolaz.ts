@@ -316,19 +316,7 @@ async function convertToMatrix(): Promise<any[][]> {
 				const cellAddress = XLSX.utils.encode_cell({ r: i, c: j })
 				const cell = sheet[cellAddress]
 				if (cell) {
-					switch (cell.t) {
-						case "s":
-							data[i][j] = cell.v
-							break
-						case "n":
-							data[i][j] = cell.v
-							break
-						case "b":
-							data[i][j] = cell.v
-							break
-						default:
-							data[i][j] = null
-					}
+					data[i][j] = cell.v
 				} else {
 					data[i][j] = null
 				}
